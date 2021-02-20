@@ -1,4 +1,7 @@
 <script>
+  import Button, { Label } from '@smui/button';
+  import Select, { Option } from '@smui/select';
+  import Textfield from '@smui/textfield';
   import {
     readBinaryFile,
     readDir,
@@ -7,12 +10,12 @@
 
   export let onMessage
 
-  let pathToRead = ''
+  const DirOptions = Object.keys(Dir)
+    .filter(key => isNaN(parseInt(key)))
+    .map(dir => [dir, Dir[dir]]);
 
-  function getDir() {
-    const dirSelect = document.getElementById('dir')
-    return dirSelect.value ? parseInt(dir.value) : null
-  }
+  let pathToRead = ''
+  let dir = ''
 
   function arrayBufferToBase64(buffer, callback) {
     const blob = new Blob([buffer], {
@@ -26,14 +29,10 @@
     reader.readAsDataURL(blob)
   }
 
-  const DirOptions = Object.keys(Dir)
-    .filter(key => isNaN(parseInt(key)))
-    .map(dir => [dir, Dir[dir]]);
-
   function read() {
     const isFile = pathToRead.match(/\S+\.\S+$/g)
     const opts = {
-      dir: getDir()
+      dir: parseInt(dir || 0)
     }
     const promise = isFile ? readBinaryFile(pathToRead, opts) : readDir(pathToRead, opts)
     promise.then(function (response) {
@@ -45,7 +44,7 @@
           })
         } else {
           const value = String.fromCharCode.apply(null, response)
-          onMessage('<textarea id="file-response" style="height: 400px"></textarea><button id="file-save">Save</button>')
+          onMessage('<textarea id="file-response" style="height: 400px"></textarea><Button variant="raised"id="file-save">Save</button>')
           setTimeout(() => {
             const fileInput = document.getElementById('file-response')
             fileInput.value = value
@@ -54,7 +53,7 @@
                 file: pathToRead,
                 contents: fileInput.value
               }, {
-                dir: getDir()
+                dir: parseInt(dir || 0)
               }).catch(onMessage)
             })
           })
@@ -66,13 +65,15 @@
   }
 </script>
 
-<form style="margin-top: 24px" on:submit|preventDefault={read}>
-  <select class="button" id="dir">
-    <option value="">None</option>
+<form id="fs" style="margin-top: 24px" on:submit|preventDefault={read}>
+  <Select bind:value={dir} label="Base dir">
+    <Option value="">None</Option>
     {#each DirOptions as dir}
-    <option value={dir[1]}>{dir[0]}</option>
+    <Option value={dir[1]}>{dir[0]}</Option>
     {/each}
-  </select>
-  <input id="path-to-read" placeholder="Type the path to read..." bind:value={pathToRead} />
-  <button class="button" id="read">Read</button>
+  </Select>
+  <Textfield label="Path" placeholder="Type the path to read..." bind:value={pathToRead}></Textfield>
+  <Button variant="raised" for="fs" type="submit">
+    <Label>Read</Label>
+  </Button>
 </form>

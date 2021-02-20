@@ -1,4 +1,8 @@
 <script>
+  import Button, { Label } from '@smui/button';
+  import Textfield from '@smui/textfield';
+  import Checkbox from '@smui/checkbox';
+  import FormField from '@smui/form-field';
   import {
     open,
     save
@@ -8,8 +12,8 @@
   } from '@tauri-apps/api/fs'
 
   export let onMessage
-  let defaultPath = null
-  let filter = null
+  let defaultPath = ''
+  let filter = ''
   let multiple = false
   let directory = false
 
@@ -77,17 +81,26 @@
 </style>
 
 <div style="margin-top: 24px">
-  <input id="dialog-default-path" placeholder="Default path" bind:value={defaultPath} />
-  <input id="dialog-filter" placeholder="Extensions filter, comma-separated" bind:value={filter} />
+  <Textfield label="Default path" bind:value={defaultPath}></Textfield>
+  <Textfield id="dialog-filter" label="Filter" placeholder="Extensions filter, comma-separated" bind:value={filter}>
+  </Textfield>
   <div>
-    <input type="checkbox" id="dialog-multiple" bind:checked={multiple} />
-    <label for="dialog-multiple">Multiple</label>
+    <FormField>
+      <Checkbox bind:checked={multiple} />
+      <span slot="label">Multiple</span>
+    </FormField>
   </div>
   <div>
-    <input type="checkbox" id="dialog-directory" bind:checked={directory} />
-    <label for="dialog-directory">Directory</label>
+    <FormField>
+      <Checkbox bind:checked={directory} />
+      <span slot="label">Directory</span>
+    </FormField>
   </div>
 
-  <button class="button" id="open-dialog" on:click={openDialog}>Open dialog</button>
-  <button class="button" id="save-dialog" on:click={saveDialog}>Open save dialog</button>
+  <Button variant="raised" on:click={openDialog}>
+    <Label>Open dialog</Label>
+  </Button>
+  <Button variant="raised" on:click={saveDialog}>
+    <Label>Open save dialog</Label>
+  </Button>
 </div>

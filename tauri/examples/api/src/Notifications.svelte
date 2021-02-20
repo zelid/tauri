@@ -1,4 +1,5 @@
 <script>
+  import Button, { Label } from '@smui/button';
   export let onMessage;
 
   function _sendNotification() {
@@ -26,6 +27,6 @@
   }
 </script>
 
-<button class="button" id="notification" on:click={sendNotification}>
-  Send test notification
-</button>
+<Button variant="raised" on:click={sendNotification}>
+  <Label>Send test notification</Label>
+</Button>

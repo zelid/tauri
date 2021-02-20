@@ -1,4 +1,8 @@
 <script>
+  import Button, { Label } from '@smui/button';
+  import Textfield from '@smui/textfield';
+  import Checkbox from '@smui/checkbox';
+  import FormField from '@smui/form-field';
   import { manager as windowManager } from "@tauri-apps/api/window";
   import { open as openDialog } from '@tauri-apps/api/dialog'
   import { open } from "@tauri-apps/api/shell";
@@ -38,8 +42,8 @@
   let height = 600
   let minWidth = 600
   let minHeight = 600
-  let maxWidth = null
-  let maxHeight = null
+  let maxWidth = 0
+  let maxHeight = 0
   let x = 300
   let y = 300
 
@@ -101,102 +105,96 @@
     flex-grow: 1;
   }
 
-  .window-controls input {
+  .window-controls Textfield {
     width: 50px;
   }
 </style>
 
 <div class="flex flex-column">
   <div>
-    <label>
-      <input type="checkbox" bind:checked={resizable}>
-      Resizable
-    </label>
-    <label>
-      <input type="checkbox" bind:checked={maximized}>
-      Maximize
-    </label>
-    <button title="Unminimizes after 2 seconds" on:click={minimize_}>
+    <FormField>
+      <Checkbox bind:checked={resizable} />
+      <span slot="label">Resizable</span>
+    </FormField>
+    <FormField>
+      <Checkbox bind:checked={maximized} />
+      <span slot="label">Maximize</span>
+    </FormField>
+    <Button variant="raised" title="Unminimizes after 2 seconds" on:click={minimize_}>
       Minimize
-    </button>
-    <button title="Visible again after 2 seconds" on:click={hide_}>
+    </Button>
+    <Button variant="raised" title="Visible again after 2 seconds" on:click={hide_}>
       Hide
-    </button>
-    <label>
-      <input type="checkbox" bind:checked={transparent}>
-      Transparent
-    </label>
-    <label>
-      <input type="checkbox" bind:checked={decorations}>
-      Has decorations
-    </label>
-    <label>
-      <input type="checkbox" bind:checked={alwaysOnTop}>
-      Always on top
-    </label>
-    <label>
-      <input type="checkbox" bind:checked={fullscreen}>
-      Fullscreen
-    </label>
-    <button on:click={getIcon}>
+    </Button>
+    <FormField>
+      <Checkbox bind:checked={transparent} />
+      <span slot="label">Transparent</span>
+    </FormField>
+    <FormField>
+      <Checkbox bind:checked={decorations} />
+      <span slot="label">Has decorations</span>
+    </FormField>
+    <FormField>
+      <Checkbox bind:checked={alwaysOnTop} />
+      <span slot="label">Always on top</span>
+    </FormField>
+    <FormField>
+      <Checkbox bind:checked={fullscreen} />
+      <span slot="label">Fullscreen</span>
+    </FormField>
+    <Button variant="raised" on:click={getIcon}>
       Change icon
-    </button>
+    </Button>
   </div>
   <div>
     <div class="window-controls flex flex-row">
       <div class="flex flex-column grow">
         <div>
-          X
-          <input type="number" bind:value={x} min="0">
+          <Textfield label="X" type="number" bind:value={x} input$min="0"></Textfield>
         </div>
         <div>
-          Y
-          <input type="number" bind:value={y} min="0">
+          <Textfield label="Y" type="number" bind:value={y} input$min="0"></Textfield>
         </div>
       </div>
 
       <div class="flex flex-column grow">
         <div>
-          Width
-          <input type="number" bind:value={width} min="400">
+          <Textfield label="Width" type="number" bind:value={width} input$min="400"></Textfield>
         </div>
         <div>
-          Height
-          <input type="number" bind:value={height} min="400">
+          <Textfield label="Height" type="number" bind:value={height} input$min="400"></Textfield>
         </div>
       </div>
 
       <div class="flex flex-column grow">
         <div>
-          Min width
-          <input type="number" bind:value={minWidth}>
+          <Textfield label="Min width" type="number" bind:value={minWidth}></Textfield>
         </div>
         <div>
-          Min height
-          <input type="number" bind:value={minHeight}>
+          <Textfield label="Min height" type="number" bind:value={minHeight}></Textfield>
         </div>
       </div>
 
       <div class="flex flex-column grow">
         <div>
-          Max width
-          <input type="number" bind:value={maxWidth} min="400">
+          <Textfield label="Max width" type="number" bind:value={maxWidth} input$min="400"></Textfield>
         </div>
         <div>
-          Max height
-          <input type="number" bind:value={maxHeight} min="400">
+          <Textfield label="Max height" type="number" bind:value={maxHeight} input$min="400"></Textfield>
         </div>
       </div>
     </div>
   </div>
 </div>
-<form style="margin-top: 24px" on:submit|preventDefault={setTitle_}>
-  <input id="title" bind:value={windowTitle} />
-  <button class="button" type="submit">Set title</button>
+<form id="set-title" style="margin-top: 24px" on:submit|preventDefault={setTitle_}>
+  <Textfield bind:value={windowTitle}></Textfield>
+  <Button variant="raised" for="set-title" type="submit">
+    <Label>Set title</Label>
+  </Button>
 </form>
-<form style="margin-top: 24px" on:submit|preventDefault={openUrl}>
-  <input id="url" bind:value={urlValue} />
-  <button class="button" id="open-url">
-    Open URL
-  </button>
+<form id="open-url" style="margin-top: 24px" on:submit|preventDefault={openUrl}>
+  <Textfield bind:value={urlValue}></Textfield>
+  <Button variant="raised" for="open-url" type="submit">
+    <Label>Open URL</Label>
+  </Button>
 </form>

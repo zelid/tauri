@@ -1,4 +1,5 @@
 <script>
+  import Button, { Label } from '@smui/button';
   import { listen, emit } from "@tauri-apps/api/event";
   import { invoke } from "@tauri-apps/api/tauri";
 
@@ -33,11 +34,13 @@
 </script>
 
 <div>
-  <button class="button" id="log" on:click={log}>Call Log API</button>
-  <button class="button" id="request" on:click={performRequest}>
-    Call Request (async) API
-  </button>
-  <button class="button" id="event" on:click={emitEvent}>
-    Send event to Rust
-  </button>
+  <Button variant="raised" on:click={log}>
+    <Label>Call Log API</Label>
+  </Button>
+  <Button variant="raised" on:click={performRequest}>
+    <Label>Call Request (async) API</Label>
+  </Button>
+  <Button variant="raised" on:click={emitEvent}>
+    <Label>Send event to Rust</Label>
+  </Button>
 </div>

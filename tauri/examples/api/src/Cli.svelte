@@ -1,4 +1,5 @@
 <script>
+  import Button, { Label } from '@smui/button';
   import { getMatches } from "@tauri-apps/api/cli";
 
   export let onMessage;
@@ -11,7 +12,7 @@
 </script>
 
 <div style="margin-top: 24px">
-  <button class="button" id="cli-matches" on:click={cliMatches}>
-    Get matches
-  </button>
+  <Button variant="raised" on:click={cliMatches}>
+    <Label>Get matches</Label>
+  </Button>
 </div>

@@ -1,4 +1,6 @@
 <script>
+  import Button, { Label } from '@smui/button';
+  import Textfield from '@smui/textfield';
   import { writable } from 'svelte/store'
   import {
     register as registerShortcut,
@@ -38,18 +40,19 @@
 
 <div style="margin-top: 24px">
   <div>
-    <input placeholder="Type a shortcut with '+' as separator..." bind:value={shortcut}>
-    <button type="button" on:click={register}>Register</button>
+    <Textfield label="Shortcut" placeholder="Type a shortcut with '+' as separator..." bind:value={shortcut}>
+    </Textfield>
+    <Button variant="raised" on:click={register}>Register</Button>
   </div>
   <div>
     {#each $shortcuts as savedShortcut}
     <div>
       {savedShortcut}
-      <button type="button" on:click={()=> unregister(savedShortcut)}>Unregister</button>
+      <Button variant="raised" on:click={()=> unregister(savedShortcut)}>Unregister</Button>
     </div>
     {/each}
     {#if $shortcuts.length}
-    <button type="button" on:click={unregisterAll}>Unregister all</button>
+    <Button variant="raised" on:click={unregisterAll}>Unregister all</Button>
     {/if}
   </div>
 </div>
