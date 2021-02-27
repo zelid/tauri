@@ -36,9 +36,6 @@ pub enum Cmd {
   Unminimize,
   Show,
   Hide,
-  SetTransparent {
-    transparent: bool,
-  },
   SetDecorations {
     decorations: bool,
   },
@@ -84,7 +81,7 @@ pub enum Cmd {
   },
 }
 
-#[cfg(create_window)]
+#[cfg(window_create)]
 #[derive(Clone, serde::Serialize)]
 struct WindowCreatedEvent {
   label: String,
@@ -95,15 +92,17 @@ impl Cmd {
     self,
     webview_manager: &crate::WebviewManager<A>,
   ) -> crate::Result<InvokeResponse> {
-    if cfg!(not(window)) {
-      Err(crate::Error::ApiNotAllowlisted("setTitle".to_string()))
+    if cfg!(not(window_all)) {
+      Err(crate::Error::ApiNotAllowlisted("window > all".to_string()))
     } else {
       let current_webview = webview_manager.current_webview().await?;
       match self {
         Self::CreateWebview { options } => {
-          #[cfg(not(create_window))]
-          return Err(crate::Error::ApiNotAllowlisted("createWindow".to_string()));
-          #[cfg(create_window)]
+          #[cfg(not(window_create))]
+          return Err(crate::Error::ApiNotAllowlisted(
+            "window > create".to_string(),
+          ));
+          #[cfg(window_create)]
           {
             let label = options.label.to_string();
             webview_manager
@@ -128,7 +127,6 @@ impl Cmd {
         Self::Unminimize => current_webview.unminimize()?,
         Self::Show => current_webview.show()?,
         Self::Hide => current_webview.hide()?,
-        Self::SetTransparent { transparent } => current_webview.set_transparent(transparent)?,
         Self::SetDecorations { decorations } => current_webview.set_decorations(decorations)?,
         Self::SetAlwaysOnTop { always_on_top } => {
           current_webview.set_always_on_top(always_on_top)?

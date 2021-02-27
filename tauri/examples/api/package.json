@@ -6,7 +6,7 @@
     "serve": "serve .",
     "watch": "rollup -c rollup.config.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tauri:build": "node ../../../cli/tauri.js/bin/tauri build"
+    "tauri": "node ../../../cli/tauri.js/bin/tauri"
   },
   "devDependencies": {
     "@material/typography": "^4.0.0",

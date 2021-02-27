@@ -2,6 +2,8 @@ pub mod wry;
 
 use crate::plugin::PluginStore;
 
+use serde_json::Value as JsonValue;
+
 /// A icon definition.
 pub enum Icon {
   /// Icon from file path.
@@ -32,8 +34,6 @@ pub enum Message {
   Show,
   /// Hides the window.
   Hide,
-  /// Updates the transparency flag.
-  SetTransparent(bool),
   /// Updates the hasDecorations flag.
   SetDecorations(bool),
   /// Updates the window alwaysOnTop flag.
@@ -147,6 +147,12 @@ pub trait WebviewBuilderExt: Sized {
   /// Whether the window should always be on top of other windows.
   fn always_on_top(self, always_on_top: bool) -> Self;
 
+  /// Sets the window icon.
+  fn icon(self, icon: Icon) -> crate::Result<Self>;
+
+  /// Whether the icon was set or not.
+  fn has_icon(&self) -> bool;
+
   /// Builds the webview instance.
   fn finish(self) -> crate::Result<Self::Webview>;
 }
@@ -156,7 +162,15 @@ pub struct Callback<D> {
   /// Function name to bind.
   pub name: String,
   /// Function callback handler.
-  pub function: Box<dyn FnMut(D, i32, Vec<String>) -> i32 + Send>,
+  pub function: Box<dyn FnMut(D, Vec<JsonValue>) + Send>,
+}
+
+/// Uses a custom handler to resolve file requests
+pub struct CustomProtocol {
+  /// Name of the protocol
+  pub name: String,
+  /// Handler for protocol
+  pub handler: Box<dyn Fn(&str) -> crate::Result<Vec<u8>> + Send + Sync>,
 }
 
 /// Webview dispatcher. A thread-safe handle to the webview API.
@@ -172,6 +186,7 @@ pub trait ApplicationDispatcherExt: Clone + Send + Sync + Sized {
     &self,
     webview_builder: Self::WebviewBuilder,
     callbacks: Vec<Callback<Self>>,
+    custom_protocol: Option<CustomProtocol>,
   ) -> crate::Result<Self>;
 
   /// Updates the window resizable flag.
@@ -197,9 +212,6 @@ pub trait ApplicationDispatcherExt: Clone + Send + Sync + Sized {
 
   /// Hides the window.
   fn hide(&self) -> crate::Result<()>;
-
-  /// Updates the transparency flag.
-  fn set_transparent(&self, resizable: bool) -> crate::Result<()>;
 
   /// Updates the hasDecorations flag.
   fn set_decorations(&self, decorations: bool) -> crate::Result<()>;
@@ -264,6 +276,7 @@ pub trait ApplicationExt: Sized {
     &mut self,
     webview_builder: Self::WebviewBuilder,
     callbacks: Vec<Callback<Self::Dispatcher>>,
+    custom_protocol: Option<CustomProtocol>,
   ) -> crate::Result<Self::Dispatcher>;
 
   /// Run the application.
