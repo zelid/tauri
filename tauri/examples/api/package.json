@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rollup -c rollup.config.js",
-    "serve": "serve .",
+    "serve": "serve public/",
     "watch": "rollup -c rollup.config.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tauri": "node ../../../cli/tauri.js/bin/tauri"
