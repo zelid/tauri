@@ -232,7 +232,7 @@ impl<A: ApplicationExt + 'static> WebviewManager<A> {
   }
 
   /// Creates a new webview.
-  pub async fn create_webview<F: FnOnce(A::WebviewBuilder) -> crate::Result<A::WebviewBuilder>>(
+  pub fn create_webview<F: FnOnce(A::WebviewBuilder) -> crate::Result<A::WebviewBuilder>>(
     &self,
     label: String,
     url: WindowUrl,
@@ -264,14 +264,11 @@ impl<A: ApplicationExt + 'static> WebviewManager<A> {
       self.dispatchers.clone(),
       label.to_string(),
     );
-    self
-      .application
-      .on_webview_created(
-        label.to_string(),
-        window_dispatcher.clone(),
-        webview_manager,
-      )
-      .await;
+    self.application.on_webview_created(
+      label.to_string(),
+      window_dispatcher.clone(),
+      webview_manager,
+    );
     Ok(WebviewDispatcher::new(window_dispatcher, label))
   }
 
