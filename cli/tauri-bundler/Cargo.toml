@@ -1,8 +1,8 @@
-workspace = {}
+workspace = { }
 
 [package]
 name = "tauri-bundler"
-version = "0.9.4"
+version = "0.10.0"
 authors = [
   "George Burton <burtonageo@gmail.com>",
   "Lucas Fernandes Gonçalves Nogueira <lucas@tauri.studio>",

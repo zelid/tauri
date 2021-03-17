@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.15.0]
+
+-   Removed the `no-server` mode, the `inliner`, the `dev` server proxy and the `loadAsset` API.
+    -   [84d7cda](https://www.github.com/tauri-apps/tauri/commit/84d7cdae632eeb02a66f8d1d7577adfa65917a34) refactor(core): remove `no-server` and its APIs ([#1215](https://www.github.com/tauri-apps/tauri/pull/1215)) on 2021-02-11
+-   The Tauri API interface is now shipped with the `@tauri-apps/api` package instead of the deprecated `tauri` package.
+    To use the new API package, delete the old `tauri` from your `package.json` and install the new package:
+    `$ yarn remove tauri && yarn add @tauri-apps/api` or `$ npm uninstall tauri && npm install @tauri-apps/api`.
+    And change all `import { someApi } from 'tauri/api` to `import { someApi } from '@tauri-apps/api'`.
+        - [3e8abe3](https://www.github.com/tauri-apps/tauri/commit/3e8abe376407bb0ca8893602590ed9edf7aa71a1) feat(cli) rewrite the core CLI in Rust ([#851](https://www.github.com/tauri-apps/tauri/pull/851)) on 2021-01-30
+-   The Tauri Node.js CLI package is now `@tauri-apps/cli`.
+    -   [3e8abe3](https://www.github.com/tauri-apps/tauri/commit/3e8abe376407bb0ca8893602590ed9edf7aa71a1) feat(cli) rewrite the core CLI in Rust ([#851](https://www.github.com/tauri-apps/tauri/pull/851)) on 2021-01-30
+    -   [e02c941](https://www.github.com/tauri-apps/tauri/commit/e02c9419cb8c66f4e43ed598d2fc74d4b19384ec) refactor(tauri): support for building without environmental variables ([#850](https://www.github.com/tauri-apps/tauri/pull/850)) on 2021-02-09
+
 ## [0.14.1]
 
 -   Fixed a TypeScript issue where it didn't allow you to put the "recursive" option in the directory functions.
